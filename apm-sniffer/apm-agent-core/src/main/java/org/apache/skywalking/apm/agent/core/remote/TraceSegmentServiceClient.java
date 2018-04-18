@@ -21,20 +21,21 @@ package org.apache.skywalking.apm.agent.core.remote;
 
 import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
-import java.util.List;
-import org.apache.skywalking.apm.agent.core.context.TracingContext;
-import org.apache.skywalking.apm.commons.datacarrier.DataCarrier;
 import org.apache.skywalking.apm.agent.core.boot.BootService;
 import org.apache.skywalking.apm.agent.core.boot.ServiceManager;
+import org.apache.skywalking.apm.agent.core.context.TracingContext;
 import org.apache.skywalking.apm.agent.core.context.TracingContextListener;
 import org.apache.skywalking.apm.agent.core.context.trace.TraceSegment;
-import org.apache.skywalking.apm.commons.datacarrier.buffer.BufferStrategy;
-import org.apache.skywalking.apm.commons.datacarrier.consumer.IConsumer;
 import org.apache.skywalking.apm.agent.core.logging.api.ILog;
 import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
+import org.apache.skywalking.apm.commons.datacarrier.DataCarrier;
+import org.apache.skywalking.apm.commons.datacarrier.buffer.BufferStrategy;
+import org.apache.skywalking.apm.commons.datacarrier.consumer.IConsumer;
 import org.apache.skywalking.apm.network.proto.Downstream;
 import org.apache.skywalking.apm.network.proto.TraceSegmentServiceGrpc;
 import org.apache.skywalking.apm.network.proto.UpstreamSegment;
+
+import java.util.List;
 
 import static org.apache.skywalking.apm.agent.core.conf.Config.Buffer.BUFFER_SIZE;
 import static org.apache.skywalking.apm.agent.core.conf.Config.Buffer.CHANNEL_SIZE;
@@ -42,6 +43,7 @@ import static org.apache.skywalking.apm.agent.core.remote.GRPCChannelStatus.CONN
 
 /**
  * @author wusheng
+ * 发送trace的客户端,通过grpc把数据传给collector
  */
 public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSegment>, TracingContextListener, GRPCChannelListener {
     private static final ILog logger = LogManager.getLogger(TraceSegmentServiceClient.class);
@@ -69,6 +71,11 @@ public class TraceSegmentServiceClient implements BootService, IConsumer<TraceSe
         carrier.consume(this, 1);
     }
 
+    /***
+     * 添加TracingContext的listener,以便生成的trace通过TracingContext调用
+     * TraceSegmentServiceClient的afterFinished方法生产trace
+     * @throws Throwable
+     */
     @Override
     public void afterBoot() throws Throwable {
         TracingContext.ListenerManager.add(this);

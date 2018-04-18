@@ -19,21 +19,23 @@
 
 package org.apache.skywalking.apm.collector.grpc.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
-import org.apache.skywalking.apm.collector.server.grpc.GRPCServer;
 import org.apache.skywalking.apm.collector.core.module.Module;
+import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
 import org.apache.skywalking.apm.collector.grpc.manager.service.GRPCManagerService;
 import org.apache.skywalking.apm.collector.grpc.manager.service.GRPCManagerServiceImpl;
 import org.apache.skywalking.apm.collector.server.ServerException;
+import org.apache.skywalking.apm.collector.server.grpc.GRPCServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * 管理grpc 负责所有grpc的启动
  */
 public class GRPCManagerProvider extends ModuleProvider {
 

@@ -19,13 +19,10 @@
 
 package org.apache.skywalking.apm.agent.core.boot;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
-import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
 import org.apache.skywalking.apm.agent.core.logging.api.ILog;
+import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
+
+import java.util.*;
 
 /**
  * The <code>ServiceManager</code> bases on {@link ServiceLoader},
@@ -40,6 +37,7 @@ public enum ServiceManager {
     private Map<Class, BootService> bootedServices = Collections.emptyMap();
 
     public void boot() {
+        //通过spi查找所有bootService
         bootedServices = loadAllServices();
 
         beforeBoot();

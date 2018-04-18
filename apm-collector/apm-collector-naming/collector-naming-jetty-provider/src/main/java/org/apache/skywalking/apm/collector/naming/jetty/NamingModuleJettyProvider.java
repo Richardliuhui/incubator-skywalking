@@ -19,19 +19,22 @@
 
 package org.apache.skywalking.apm.collector.naming.jetty;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.cluster.ClusterModule;
+import org.apache.skywalking.apm.collector.core.module.Module;
 import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
-import org.apache.skywalking.apm.collector.naming.NamingModule;
-import org.apache.skywalking.apm.collector.naming.service.NamingHandlerRegisterService;
-import org.apache.skywalking.apm.collector.core.module.Module;
 import org.apache.skywalking.apm.collector.jetty.manager.JettyManagerModule;
 import org.apache.skywalking.apm.collector.jetty.manager.service.JettyManagerService;
+import org.apache.skywalking.apm.collector.naming.NamingModule;
 import org.apache.skywalking.apm.collector.naming.jetty.service.NamingJettyHandlerRegisterService;
+import org.apache.skywalking.apm.collector.naming.service.NamingHandlerRegisterService;
+
+import java.util.Properties;
 
 /**
  * @author peng-yongsheng
+ * jetty naming module
+ * 负责jetty初始化
  */
 public class NamingModuleJettyProvider extends ModuleProvider {
 

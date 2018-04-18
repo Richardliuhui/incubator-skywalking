@@ -18,9 +18,6 @@
 
 package org.apache.skywalking.apm.collector.remote.grpc.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.apache.skywalking.apm.collector.cluster.ClusterModuleListener;
 import org.apache.skywalking.apm.collector.core.UnexpectedException;
 import org.apache.skywalking.apm.collector.core.data.RemoteData;
@@ -33,6 +30,10 @@ import org.apache.skywalking.apm.collector.remote.service.RemoteClient;
 import org.apache.skywalking.apm.collector.remote.service.RemoteDataIDGetter;
 import org.apache.skywalking.apm.collector.remote.service.RemoteSenderService;
 import org.apache.skywalking.apm.collector.remote.service.Selector;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author peng-yongsheng
@@ -90,6 +91,10 @@ public class GRPCRemoteSenderService extends ClusterModuleListener implements Re
         return PATH;
     }
 
+    /***
+     * 有服务加入通知更新remoteClients
+     * @param serverAddress
+     */
     @Override public synchronized void serverJoinNotify(String serverAddress) {
         List<RemoteClient> newRemoteClients = new ArrayList<>();
         newRemoteClients.addAll(remoteClients);
@@ -104,6 +109,10 @@ public class GRPCRemoteSenderService extends ClusterModuleListener implements Re
         this.remoteClients = newRemoteClients;
     }
 
+    /***
+     * 有服务退出通知更新remoteClients
+     * @param serverAddress
+     */
     @Override public synchronized void serverQuitNotify(String serverAddress) {
         List<RemoteClient> newRemoteClients = new ArrayList<>();
         newRemoteClients.addAll(remoteClients);

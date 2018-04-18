@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author peng-yongsheng
+ * collector的启动类
  */
 public class CollectorBootStartUp {
 
@@ -39,7 +40,9 @@ public class CollectorBootStartUp {
         ApplicationConfigLoader configLoader = new ApplicationConfigLoader();
         ModuleManager manager = new ModuleManager();
         try {
+            //加载yml文件配置
             ApplicationConfiguration applicationConfiguration = configLoader.load();
+            //初始化module
             manager.init(applicationConfiguration);
         } catch (ConfigFileNotFoundException | ModuleNotFoundException | ProviderNotFoundException | ServiceNotProvidedException e) {
             logger.error(e.getMessage(), e);

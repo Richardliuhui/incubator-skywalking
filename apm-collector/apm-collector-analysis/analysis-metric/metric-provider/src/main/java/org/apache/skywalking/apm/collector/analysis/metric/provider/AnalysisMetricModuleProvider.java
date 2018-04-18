@@ -18,7 +18,6 @@
 
 package org.apache.skywalking.apm.collector.analysis.metric.provider;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.analysis.metric.define.AnalysisMetricModule;
 import org.apache.skywalking.apm.collector.analysis.metric.define.service.IInstanceHeartBeatService;
 import org.apache.skywalking.apm.collector.analysis.metric.provider.service.InstanceHeartBeatService;
@@ -59,6 +58,8 @@ import org.apache.skywalking.apm.collector.storage.table.instance.InstanceRefere
 import org.apache.skywalking.apm.collector.storage.table.service.ServiceMetric;
 import org.apache.skywalking.apm.collector.storage.table.service.ServiceReferenceMetric;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
  */
@@ -79,6 +80,7 @@ public class AnalysisMetricModuleProvider extends ModuleProvider {
     }
 
     @Override public void start(Properties config) throws ServiceNotProvidedException {
+        //添加注册seqment parser监听器
         segmentParserListenerRegister();
 
         WorkerCreateListener workerCreateListener = new WorkerCreateListener();
@@ -99,6 +101,9 @@ public class AnalysisMetricModuleProvider extends ModuleProvider {
         return new String[] {AnalysisSegmentParserModule.NAME};
     }
 
+    /***
+     * 添加注册seqment parser监听器
+     */
     private void segmentParserListenerRegister() {
         ISegmentParserListenerRegister segmentParserListenerRegister = getManager().find(AnalysisSegmentParserModule.NAME).getService(ISegmentParserListenerRegister.class);
         segmentParserListenerRegister.register(new ServiceReferenceMetricSpanListener.Factory());

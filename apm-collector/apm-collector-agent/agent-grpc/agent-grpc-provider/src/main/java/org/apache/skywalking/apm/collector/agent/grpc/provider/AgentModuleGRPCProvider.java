@@ -18,14 +18,8 @@
 
 package org.apache.skywalking.apm.collector.agent.grpc.provider;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.agent.grpc.define.AgentGRPCModule;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.ApplicationRegisterServiceHandler;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.InstanceDiscoveryServiceHandler;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.JVMMetricsServiceHandler;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.NetworkAddressRegisterServiceHandler;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.ServiceNameDiscoveryServiceHandler;
-import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.TraceSegmentServiceHandler;
+import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.*;
 import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.naming.AgentGRPCNamingHandler;
 import org.apache.skywalking.apm.collector.agent.grpc.provider.handler.naming.AgentGRPCNamingListener;
 import org.apache.skywalking.apm.collector.analysis.metric.define.AnalysisMetricModule;
@@ -42,8 +36,11 @@ import org.apache.skywalking.apm.collector.naming.NamingModule;
 import org.apache.skywalking.apm.collector.naming.service.NamingHandlerRegisterService;
 import org.apache.skywalking.apm.collector.server.Server;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * 主要用入接收agent发来的Trace等
  */
 public class AgentModuleGRPCProvider extends ModuleProvider {
 
@@ -66,10 +63,10 @@ public class AgentModuleGRPCProvider extends ModuleProvider {
     @Override public void start(Properties config) throws ServiceNotProvidedException {
         String host = config.getProperty(HOST);
         Integer port = (Integer)config.get(PORT);
-
+        //把agentGrpc的信息注册到配置中心
         ModuleRegisterService moduleRegisterService = getManager().find(ClusterModule.NAME).getService(ModuleRegisterService.class);
         moduleRegisterService.register(AgentGRPCModule.NAME, this.name(), new AgentModuleGRPCRegistration(host, port));
-
+        //添加agentGrpc路径的监听
         AgentGRPCNamingListener namingListener = new AgentGRPCNamingListener();
         ModuleListenerService moduleListenerService = getManager().find(ClusterModule.NAME).getService(ModuleListenerService.class);
         moduleListenerService.addListener(namingListener);
@@ -79,7 +76,7 @@ public class AgentModuleGRPCProvider extends ModuleProvider {
 
         GRPCManagerService managerService = getManager().find(GRPCManagerModule.NAME).getService(GRPCManagerService.class);
         Server gRPCServer = managerService.createIfAbsent(host, port);
-
+        //添加gRPC的handler
         addHandlers(gRPCServer);
     }
 

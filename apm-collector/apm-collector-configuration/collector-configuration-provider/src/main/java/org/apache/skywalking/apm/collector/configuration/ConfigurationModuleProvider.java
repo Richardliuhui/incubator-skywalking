@@ -18,29 +18,16 @@
 
 package org.apache.skywalking.apm.collector.configuration;
 
-import java.util.Properties;
-import org.apache.skywalking.apm.collector.configuration.service.ApdexThresholdService;
-import org.apache.skywalking.apm.collector.configuration.service.ApplicationAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.ApplicationReferenceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.CollectorConfigService;
-import org.apache.skywalking.apm.collector.configuration.service.IApdexThresholdService;
-import org.apache.skywalking.apm.collector.configuration.service.IApplicationAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.IApplicationReferenceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.ICollectorConfig;
-import org.apache.skywalking.apm.collector.configuration.service.IInstanceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.IInstanceReferenceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.IServiceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.IServiceReferenceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.InstanceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.InstanceReferenceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.ServiceAlarmRuleConfig;
-import org.apache.skywalking.apm.collector.configuration.service.ServiceReferenceAlarmRuleConfig;
+import org.apache.skywalking.apm.collector.configuration.service.*;
 import org.apache.skywalking.apm.collector.core.module.Module;
 import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * 负责配置文件初始化
  */
 public class ConfigurationModuleProvider extends ModuleProvider {
     private static final String NAMESPACE = "namespace";

@@ -19,13 +19,14 @@
 
 package org.apache.skywalking.apm.collector.storage;
 
-import java.util.List;
-import org.apache.skywalking.apm.collector.core.data.StorageDefineLoader;
 import org.apache.skywalking.apm.collector.client.Client;
-import org.apache.skywalking.apm.collector.core.define.DefineException;
+import org.apache.skywalking.apm.collector.core.data.StorageDefineLoader;
 import org.apache.skywalking.apm.collector.core.data.TableDefine;
+import org.apache.skywalking.apm.collector.core.define.DefineException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * @author peng-yongsheng
@@ -37,12 +38,14 @@ public abstract class StorageInstaller {
     public final void install(Client client) throws StorageException {
         StorageDefineLoader defineLoader = new StorageDefineLoader();
         try {
+            //从storage.define获取所有表的定义
             List<TableDefine> tableDefines = defineLoader.load();
             defineFilter(tableDefines);
             Boolean debug = System.getProperty("debug") != null;
 
             for (TableDefine tableDefine : tableDefines) {
                 tableDefine.initialize();
+                //如果表不存在则创建
                 if (!isExists(client, tableDefine)) {
                     logger.info("table: {} not exists", tableDefine.getName());
                     createTable(client, tableDefine);

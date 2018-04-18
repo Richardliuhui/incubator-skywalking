@@ -19,21 +19,23 @@
 
 package org.apache.skywalking.apm.collector.jetty.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import org.apache.skywalking.apm.collector.server.jetty.JettyServer;
 import org.apache.skywalking.apm.collector.core.module.Module;
 import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
 import org.apache.skywalking.apm.collector.jetty.manager.service.JettyManagerService;
 import org.apache.skywalking.apm.collector.jetty.manager.service.JettyManagerServiceImpl;
 import org.apache.skywalking.apm.collector.server.ServerException;
+import org.apache.skywalking.apm.collector.server.jetty.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ *  管理所有Jetty,负责所有jetty的启动
  */
 public class JettyManagerProvider extends ModuleProvider {
 

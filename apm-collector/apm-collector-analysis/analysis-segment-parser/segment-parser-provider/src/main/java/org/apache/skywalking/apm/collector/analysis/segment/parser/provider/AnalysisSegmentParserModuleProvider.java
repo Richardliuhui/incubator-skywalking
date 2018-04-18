@@ -18,7 +18,6 @@
 
 package org.apache.skywalking.apm.collector.analysis.segment.parser.provider;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.analysis.register.define.AnalysisRegisterModule;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.AnalysisSegmentParserModule;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.service.ISegmentParseService;
@@ -38,8 +37,11 @@ import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
 import org.apache.skywalking.apm.collector.storage.StorageModule;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * seqment parser
  */
 public class AnalysisSegmentParserModuleProvider extends ModuleProvider {
 
@@ -55,7 +57,9 @@ public class AnalysisSegmentParserModuleProvider extends ModuleProvider {
     }
 
     @Override public void prepare(Properties config) throws ServiceNotProvidedException {
+        //初始化seqment parser listener管理器
         this.listenerManager = new SegmentParserListenerManager();
+        //注册seqment parser 监听器
         this.registerServiceImplementation(ISegmentParserListenerRegister.class, new SegmentParserListenerRegister(listenerManager));
         this.registerServiceImplementation(ISegmentParseService.class, new SegmentParseService(getManager(), listenerManager));
 

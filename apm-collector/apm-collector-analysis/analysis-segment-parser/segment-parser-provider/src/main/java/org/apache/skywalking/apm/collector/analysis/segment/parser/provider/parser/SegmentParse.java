@@ -19,18 +19,11 @@
 package org.apache.skywalking.apm.collector.analysis.segment.parser.provider.parser;
 
 import com.google.protobuf.InvalidProtocolBufferException;
-import java.util.LinkedList;
-import java.util.List;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.decorator.ReferenceDecorator;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.decorator.SegmentDecorator;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.decorator.SpanDecorator;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.graph.GraphIdDefine;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.EntrySpanListener;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.ExitSpanListener;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.FirstSpanListener;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.GlobalTraceIdsListener;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.LocalSpanListener;
-import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.SpanListener;
+import org.apache.skywalking.apm.collector.analysis.segment.parser.define.listener.*;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.define.service.ISegmentParseService;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.provider.parser.standardization.ReferenceIdExchanger;
 import org.apache.skywalking.apm.collector.analysis.segment.parser.provider.parser.standardization.SegmentStandardization;
@@ -48,8 +41,12 @@ import org.apache.skywalking.apm.network.proto.UpstreamSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * @author peng-yongsheng
+ * seqment 解析及落库
  */
 public class SegmentParse {
 
@@ -68,6 +65,7 @@ public class SegmentParse {
     }
 
     public boolean parse(UpstreamSegment segment, ISegmentParseService.Source source) {
+        //创建span监听器
         createSpanListeners();
 
         try {
@@ -85,6 +83,7 @@ public class SegmentParse {
                 return false;
             } else {
                 logger.debug("This segment id exchange success, id: {}", segmentId);
+                //通知所有listener 进行落库
                 notifyListenerToBuild();
                 buildSegment(segmentId, segmentDecorator.toByteArray());
                 return true;

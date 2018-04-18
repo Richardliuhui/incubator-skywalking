@@ -41,6 +41,7 @@ public class ModuleManager {
     public void init(
         ApplicationConfiguration applicationConfiguration) throws ModuleNotFoundException, ProviderNotFoundException, ServiceNotProvidedException, CycleDependencyException {
         String[] moduleNames = applicationConfiguration.moduleList();
+        //通过spi找到所有Module
         ServiceLoader<Module> moduleServiceLoader = ServiceLoader.load(Module.class);
         LinkedList<String> moduleList = new LinkedList(Arrays.asList(moduleNames));
         for (Module module : moduleServiceLoader) {
@@ -54,6 +55,7 @@ public class ModuleManager {
                     } catch (IllegalAccessException e) {
                         throw new ModuleNotFoundException(e);
                     }
+                    //找到Module下的provider并对其初始化并调用prepare方法
                     newInstance.prepare(this, applicationConfiguration.getModuleConfiguration(moduleName));
                     loadedModules.put(moduleName, newInstance);
                     moduleList.remove(moduleName);
@@ -66,7 +68,7 @@ public class ModuleManager {
         }
 
         BootstrapFlow bootstrapFlow = new BootstrapFlow(loadedModules, applicationConfiguration);
-
+        //启动各模块
         bootstrapFlow.start(this, applicationConfiguration);
         bootstrapFlow.notifyAfterCompleted();
     }

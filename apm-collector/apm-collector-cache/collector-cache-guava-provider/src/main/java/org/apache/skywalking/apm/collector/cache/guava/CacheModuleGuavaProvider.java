@@ -18,25 +18,19 @@
 
 package org.apache.skywalking.apm.collector.cache.guava;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.cache.CacheModule;
-import org.apache.skywalking.apm.collector.cache.guava.service.ApplicationCacheGuavaService;
-import org.apache.skywalking.apm.collector.cache.guava.service.InstanceCacheGuavaService;
-import org.apache.skywalking.apm.collector.cache.guava.service.NetworkAddressCacheGuavaService;
-import org.apache.skywalking.apm.collector.cache.guava.service.ServiceIdCacheGuavaService;
-import org.apache.skywalking.apm.collector.cache.guava.service.ServiceNameCacheGuavaService;
-import org.apache.skywalking.apm.collector.cache.service.ApplicationCacheService;
-import org.apache.skywalking.apm.collector.cache.service.InstanceCacheService;
-import org.apache.skywalking.apm.collector.cache.service.NetworkAddressCacheService;
-import org.apache.skywalking.apm.collector.cache.service.ServiceIdCacheService;
-import org.apache.skywalking.apm.collector.cache.service.ServiceNameCacheService;
+import org.apache.skywalking.apm.collector.cache.guava.service.*;
+import org.apache.skywalking.apm.collector.cache.service.*;
 import org.apache.skywalking.apm.collector.core.module.Module;
 import org.apache.skywalking.apm.collector.core.module.ModuleProvider;
 import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedException;
 import org.apache.skywalking.apm.collector.storage.StorageModule;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * cache module 基于guava cache
  */
 public class CacheModuleGuavaProvider extends ModuleProvider {
 

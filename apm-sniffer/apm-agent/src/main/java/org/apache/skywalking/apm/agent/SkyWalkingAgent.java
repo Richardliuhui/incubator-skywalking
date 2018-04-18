@@ -19,25 +19,23 @@
 
 package org.apache.skywalking.apm.agent;
 
-import java.lang.instrument.Instrumentation;
-import java.util.List;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.utility.JavaModule;
 import org.apache.skywalking.apm.agent.core.boot.ServiceManager;
+import org.apache.skywalking.apm.agent.core.conf.SnifferConfigInitializer;
 import org.apache.skywalking.apm.agent.core.logging.api.ILog;
 import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
-import org.apache.skywalking.apm.agent.core.plugin.AbstractClassEnhancePluginDefine;
-import org.apache.skywalking.apm.agent.core.plugin.EnhanceContext;
-import org.apache.skywalking.apm.agent.core.plugin.PluginBootstrap;
-import org.apache.skywalking.apm.agent.core.plugin.PluginException;
-import org.apache.skywalking.apm.agent.core.plugin.PluginFinder;
-import org.apache.skywalking.apm.agent.core.conf.SnifferConfigInitializer;
+import org.apache.skywalking.apm.agent.core.plugin.*;
+
+import java.lang.instrument.Instrumentation;
+import java.util.List;
 
 /**
  * The main entrance of sky-waking agent,
  * based on javaagent mechanism.
+ * agent入口
  *
  * @author wusheng
  */
@@ -55,10 +53,11 @@ public class SkyWalkingAgent {
     public static void premain(String agentArgs, Instrumentation instrumentation) throws PluginException {
         final PluginFinder pluginFinder;
         try {
+            //初始化配置
             SnifferConfigInitializer.initialize();
-
+            //加载插件
             pluginFinder = new PluginFinder(new PluginBootstrap().loadPlugins());
-
+            //启动所有BootService,如agent发送trace的TraceSegmentServiceClient
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             logger.error(e, "Skywalking agent initialized failure. Shutting down.");
@@ -75,11 +74,13 @@ public class SkyWalkingAgent {
             @Override
             public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder, TypeDescription typeDescription,
                 ClassLoader classLoader, JavaModule module) {
+                //找到所有适配的插件
                 List<AbstractClassEnhancePluginDefine> pluginDefines = pluginFinder.find(typeDescription, classLoader);
                 if (pluginDefines.size() > 0) {
                     DynamicType.Builder<?> newBuilder = builder;
                     EnhanceContext context = new EnhanceContext();
                     for (AbstractClassEnhancePluginDefine define : pluginDefines) {
+                        //修改字节码,加上拦截器,实现AOP
                         DynamicType.Builder<?> possibleNewBuilder = define.define(typeDescription.getTypeName(), newBuilder, classLoader, context);
                         if (possibleNewBuilder != null) {
                             newBuilder = possibleNewBuilder;

@@ -18,7 +18,6 @@
 
 package org.apache.skywalking.apm.collector.cluster.zookeeper;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.client.zookeeper.ZookeeperClient;
 import org.apache.skywalking.apm.collector.client.zookeeper.ZookeeperClientException;
 import org.apache.skywalking.apm.collector.cluster.ClusterModule;
@@ -36,8 +35,11 @@ import org.apache.skywalking.apm.collector.core.module.ServiceNotProvidedExcepti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * 负责连接ZK
  */
 public class ClusterModuleZookeeperProvider extends ModuleProvider {
 
@@ -69,6 +71,11 @@ public class ClusterModuleZookeeperProvider extends ModuleProvider {
         this.registerServiceImplementation(ModuleRegisterService.class, new ZookeeperModuleRegisterService(dataMonitor));
     }
 
+    /***
+     * 建立ZK连接
+     * @param config from `application.yml`
+     * @throws ServiceNotProvidedException
+     */
     @Override public void start(Properties config) throws ServiceNotProvidedException {
         dataMonitor.setNamespace(getManager().find(ConfigurationModule.NAME).getService(ICollectorConfig.class).getNamespace());
         try {
@@ -78,6 +85,10 @@ public class ClusterModuleZookeeperProvider extends ModuleProvider {
         }
     }
 
+    /***
+     * 所有模板准备好后,创建ZK节点
+     * @throws ServiceNotProvidedException
+     */
     @Override public void notifyAfterCompleted() throws ServiceNotProvidedException {
         try {
             dataMonitor.start();

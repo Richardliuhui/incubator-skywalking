@@ -18,13 +18,8 @@
 
 package org.apache.skywalking.apm.collector.agent.jetty.provider;
 
-import java.util.Properties;
 import org.apache.skywalking.apm.collector.agent.jetty.define.AgentJettyModule;
-import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.ApplicationRegisterServletHandler;
-import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.InstanceDiscoveryServletHandler;
-import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.NetworkAddressRegisterServletHandler;
-import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.ServiceNameDiscoveryServiceHandler;
-import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.TraceSegmentServletHandler;
+import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.*;
 import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.naming.AgentJettyNamingHandler;
 import org.apache.skywalking.apm.collector.agent.jetty.provider.handler.naming.AgentJettyNamingListener;
 import org.apache.skywalking.apm.collector.cluster.ClusterModule;
@@ -39,8 +34,11 @@ import org.apache.skywalking.apm.collector.naming.NamingModule;
 import org.apache.skywalking.apm.collector.naming.service.NamingHandlerRegisterService;
 import org.apache.skywalking.apm.collector.server.Server;
 
+import java.util.Properties;
+
 /**
  * @author peng-yongsheng
+ * agent http模式 用于接入agent发来的trace
  */
 public class AgentModuleJettyProvider extends ModuleProvider {
 

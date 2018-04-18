@@ -18,13 +18,14 @@
 
 package org.apache.skywalking.apm.collector.core.module;
 
+import org.apache.skywalking.apm.collector.core.util.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.apache.skywalking.apm.collector.core.util.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author wu-sheng
@@ -41,7 +42,7 @@ public class BootstrapFlow {
         this.loadedModules = loadedModules;
         this.applicationConfiguration = applicationConfiguration;
         startupSequence = new LinkedList<>();
-
+        //制定启动顺序,有依赖的provider需等它依赖的provider先启动
         makeSequence();
     }
 
